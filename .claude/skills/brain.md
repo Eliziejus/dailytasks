@@ -3,6 +3,8 @@ name: brain
 description: BRAIN Method — Create a minimal project scaffold and actionable intent list for a new feature or idea. Use when work is ambiguous, architectural, or likely >60 minutes.
 ---
 
+<!-- Copyright (c) 2025-2026 John Hewitt (john@helpirl.com). Licensed under the MIT License. -->
+
 ## When to Use
 
 Trigger BRAIN when 2+ of these apply:
