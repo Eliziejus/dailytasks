@@ -35,11 +35,51 @@ body {
 .app-header {
   padding: 1.5rem 1rem;
   text-align: center;
+  position: relative;
 }
 
 .app-header h1 {
   margin: 0;
   font-size: 1.5rem;
+}
+
+.user-info {
+  position: absolute;
+  top: 1.5rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+#logout-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+#logout-btn:hover {
+  background: var(--color-bg);
+}
+
+.auth-loading {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 2rem 1rem;
+}
+
+body:not([data-auth-pending]) .auth-loading {
+  display: none;
+}
+
+body[data-auth-pending] main {
+  display: none;
 }
 
 main {

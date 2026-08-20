@@ -6,7 +6,7 @@
 | 1   | FirebaseSetup | Done | 0.5h |  |  |
 | 2   | LoginPage | Done | 1h |  |  |
 | 3   | RegisterPage | Done | 1h |  |  |
-| 4   | AuthGuard | Todo | 1h |  |  |
+| 4   | AuthGuard | Done | 1h |  |  |
 | 5   | StylingPolish | Todo | 1h |  |  |
 | 6   | ConfigDocsVerify | Todo | 0.5h |  | Cannot be fully verified until user supplies real Firebase project config |
 
