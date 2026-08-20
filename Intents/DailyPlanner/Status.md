@@ -10,11 +10,11 @@
 | 5   | TaskActions | Done | 1h |  |  |
 | 6   | Persistence | Done | 1h |  |  |
 | 7   | StylingPolish | Done | 1.5h |  |  |
-| 8   | Deploy | Todo | 0.5h |  |  |
+| 8   | Deploy | Blocked | 0.5h |  | Deferred by user — revisit when ready to go live |
 
 > Claude may update **Status** column. Human owns **Actual** column.
 
 ## Project State
 - **Status**: Active
-- **Reason**: (n/a)
-- **Revisit trigger**: (n/a)
+- **Reason**: Intents 1–7 complete; deploy (8) deliberately paused
+- **Revisit trigger**: User decides to deploy publicly
