@@ -7,6 +7,8 @@ A simple website with a calendar and a daily task list.
 No build step required. Clone the repo and open `src/index.html` in a browser,
 or serve `src/` with any static file server.
 
+Live: https://eliziejus.github.io/dailytasks/ (deployed via GitHub Actions on every push to `main` — see `.github/workflows/deploy.yml`). Sign-in won't work there until this domain is added to Firebase's Authorized Domains and `src/js/firebase-config.js` has real project values — see "Setting up auth" below.
+
 ## Usage
 
 - Register or log in with an email/password account.
