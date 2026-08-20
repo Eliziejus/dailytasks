@@ -9,3 +9,11 @@
 <!-- 3-minute brain dump. Do not edit or reinterpret. -->
 
 I want to create a website with calendar and daily tasks. Can you do it for me?
+
+## Refine (scope)
+- **Goal**: A website showing a calendar and a daily task list.
+- **Stack**: Plain HTML/CSS/JS, no build step.
+- **Persistence**: Browser localStorage — no backend, no login.
+- **Audience/Deployment**: Public, deployed as a static site (e.g. GitHub Pages/Netlify).
+- **In / Out of scope**: In — calendar view, add/edit/complete/delete daily tasks. Out — accounts, multi-device sync, backend/database (for now).
+- **Definition of Done**: TBD (set during Arrange)
