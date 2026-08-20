@@ -9,7 +9,7 @@
 | 4   | TaskForm | Done | 1.5h |  |  |
 | 5   | TaskActions | Done | 1h |  |  |
 | 6   | Persistence | Done | 1h |  |  |
-| 7   | StylingPolish | Todo | 1.5h |  |  |
+| 7   | StylingPolish | Done | 1.5h |  |  |
 | 8   | Deploy | Todo | 0.5h |  |  |
 
 > Claude may update **Status** column. Human owns **Actual** column.
