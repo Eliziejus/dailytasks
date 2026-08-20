@@ -3,7 +3,7 @@
 ## Intents
 | No. | Name | Status | Est. | Actual | Notes |
 |----:|------|--------|-----:|-------:|-------|
-| 1   | FirebaseSetup | Todo | 0.5h |  |  |
+| 1   | FirebaseSetup | Done | 0.5h |  |  |
 | 2   | LoginPage | Todo | 1h |  |  |
 | 3   | RegisterPage | Todo | 1h |  |  |
 | 4   | AuthGuard | Todo | 1h |  |  |
