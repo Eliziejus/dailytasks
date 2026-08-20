@@ -352,6 +352,14 @@ dialog#task-dialog::backdrop {
   margin: 0.25rem 0 0;
 }
 
+.sync-error {
+  background: #fdecea;
+  border: 1px solid #e6a19a;
+  border-radius: var(--radius);
+  padding: 0.6rem 0.75rem;
+  margin: 0 0 1rem;
+}
+
 .dialog-actions {
   display: flex;
   justify-content: flex-end;

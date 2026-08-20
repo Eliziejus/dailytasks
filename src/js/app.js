@@ -194,6 +194,7 @@ function renderDayDetail() {
       updateTask(currentUid, task.id, { done: checkbox.checked }).catch((err) => {
         console.error("Failed to update task:", err);
         checkbox.checked = !checkbox.checked;
+        showSyncError("Failed to update task. Please try again.");
       });
     });
 
@@ -243,6 +244,7 @@ function renderDayDetail() {
       if (!window.confirm(`Delete "${task.title}"?`)) return;
       deleteTask(currentUid, task.id).catch((err) => {
         console.error("Failed to delete task:", err);
+        showSyncError("Failed to delete task. Please try again.");
       });
     });
 
@@ -324,6 +326,26 @@ taskForm.addEventListener("submit", async (event) => {
   }
 });
 
+// --- Loading / sync error states ---
+
+const syncErrorEl = document.getElementById("sync-error");
+
+function showSyncError(message) {
+  syncErrorEl.textContent = message;
+  syncErrorEl.hidden = false;
+}
+
+function hideSyncError() {
+  syncErrorEl.hidden = true;
+}
+
+// Reveals the planner. Called once the first batch of tasks has actually
+// loaded (or loading has definitively failed) — not just once auth resolves —
+// so there's no flash of an empty task list between sign-in and first data.
+function stopLoading() {
+  document.body.removeAttribute("data-auth-pending");
+}
+
 // --- Firestore subscription, driven by auth state ---
 
 onAuthStateChanged(auth, async (user) => {
@@ -347,12 +369,16 @@ onAuthStateChanged(auth, async (user) => {
   unsubscribeTasks = subscribeToTasks(
     currentUid,
     (tasks) => {
+      hideSyncError();
       tasksByDate = groupByDate(tasks);
       renderWeekStrip();
       renderDayDetail();
+      stopLoading();
     },
     (err) => {
       console.error("Failed to load tasks:", err);
+      showSyncError("Failed to load tasks. Check your connection and try reloading.");
+      stopLoading();
     }
   );
 });

@@ -10,7 +10,8 @@ onAuthStateChanged(auth, (user) => {
     return;
   }
 
-  document.body.removeAttribute("data-auth-pending");
+  // Leaves `data-auth-pending` in place: app.js clears it once the first
+  // batch of tasks has actually loaded, not just once auth has resolved.
   userEmailEl.textContent = user.email;
   userInfo.hidden = false;
 });
