@@ -11,7 +11,7 @@ Live: https://eliziejus.github.io/dailytasks/ (deployed via GitHub Actions on ev
 
 ## Usage
 
-- Register or log in with an email/password account.
+- Register or log in with an email/password account, or with **Continue with Google**.
 - View the calendar and pick a day.
 - Add, complete, and delete tasks for that day.
 - Tasks are saved to your account in the cloud (Firestore) and sync live across every tab or device where you're signed in. If you used the app before cloud sync existed, any tasks already sitting in that browser are uploaded to your account automatically the first time you log in.
@@ -22,9 +22,10 @@ The planner is gated behind [Firebase Authentication](https://firebase.google.co
 
 1. Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project (or reuse an existing one).
 2. In the project, go to **Build → Authentication → Sign-in method** and enable the **Email/Password** provider.
-3. Go to **Project settings → General → Your apps**, add a **Web app**, and copy the `firebaseConfig` object it gives you.
-4. Paste those values into `src/js/firebase-config.js`, replacing the placeholders.
-5. Before deploying, go to **Authentication → Settings → Authorized domains** and add whatever domain you deploy to (e.g. your GitHub Pages or Netlify domain). Sign-in will fail on a domain that isn't listed there, even if it works on `localhost`.
+3. In the same **Sign-in method** list, enable **Google** too — it'll ask for a support email, which can be your own.
+4. Go to **Project settings → General → Your apps**, add a **Web app**, and copy the `firebaseConfig` object it gives you.
+5. Paste those values into `src/js/firebase-config.js`, replacing the placeholders.
+6. Before deploying, go to **Authentication → Settings → Authorized domains** and add whatever domain you deploy to (e.g. your GitHub Pages or Netlify domain). Sign-in will fail on a domain that isn't listed there, even if it works on `localhost`. This one domain list covers every sign-in method — no separate step for Google.
 
 Firebase's web config values (`apiKey`, `authDomain`, etc.) are safe to commit — they aren't secrets. Access is controlled by the Sign-in method settings and Firebase Security Rules, not by hiding this config.
 
@@ -37,6 +38,9 @@ Firebase's web config values (`apiKey`, `authDomain`, etc.) are safe to commit �
 - [ ] Logging in with the account you registered lands on the planner
 - [ ] Logging in with the wrong password shows an inline error and does not proceed
 - [ ] Reloading the planner while signed in keeps you signed in (no redirect to login)
+- [ ] Clicking "Continue with Google" on either page, completing the popup, signs you in and lands on the planner
+- [ ] Clicking "Continue with Google" again with the same account also works (no duplicate-account error)
+- [ ] Closing the Google popup without finishing shows no error and leaves you on the page
 
 ## Cloud sync (Firestore)
 
