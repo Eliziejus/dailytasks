@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In — Daily Planner</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body class="auth-body">
+  <header class="app-header">
+    <h1>Daily Planner</h1>
+  </header>
+
+  <main class="auth-main">
+    <form id="login-form" class="auth-form" novalidate>
+      <h2>Log In</h2>
+
+      <label for="login-email-input">Email</label>
+      <input id="login-email-input" name="email" type="email" required autocomplete="email" />
+
+      <label for="login-password-input">Password</label>
+      <input id="login-password-input" name="password" type="password" required autocomplete="current-password" />
+
+      <p id="login-form-error" class="form-error" hidden></p>
+
+      <div class="dialog-actions">
+        <button type="submit" id="login-submit-btn">Log In</button>
+      </div>
+
+      <p class="auth-switch">Don't have an account? <a href="register.html">Register</a></p>
+    </form>
+  </main>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>
