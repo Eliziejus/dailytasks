@@ -3,7 +3,7 @@
 ## Intents
 | No. | Name | Status | Est. | Actual | Notes |
 |----:|------|--------|-----:|-------:|-------|
-| 1   | WireGoogleSignIn | Todo | 0.5h |  |  |
+| 1   | WireGoogleSignIn | Done | 0.5h |  |  |
 | 2   | DocsVerify | Todo | 0.5h |  | Cannot be fully verified until user enables the Google provider |
 
 > Claude may update **Status** column. Human owns **Actual** column.

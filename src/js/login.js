@@ -1,10 +1,12 @@
 import { auth, onAuthStateChanged, signInWithEmailAndPassword } from "./firebase.js";
+import { signInWithGoogle, isBenignPopupError } from "./google-auth.js";
 
 const form = document.getElementById("login-form");
 const emailInput = document.getElementById("login-email-input");
 const passwordInput = document.getElementById("login-password-input");
 const errorEl = document.getElementById("login-form-error");
 const submitBtn = document.getElementById("login-submit-btn");
+const googleBtn = document.getElementById("google-signin-btn");
 
 // Already signed in? Skip straight to the planner.
 onAuthStateChanged(auth, (user) => {
@@ -32,6 +34,8 @@ function messageForError(err) {
       return "Incorrect email or password.";
     case "auth/too-many-requests":
       return "Too many attempts. Please wait a moment and try again.";
+    case "auth/account-exists-with-different-credential":
+      return "An account with this email already exists using a different sign-in method.";
     default:
       return "Something went wrong. Please try again.";
   }
@@ -59,5 +63,20 @@ form.addEventListener("submit", async (event) => {
     showError(messageForError(err));
     submitBtn.disabled = false;
     submitBtn.textContent = "Log In";
+  }
+});
+
+googleBtn.addEventListener("click", async () => {
+  hideError();
+  googleBtn.disabled = true;
+
+  try {
+    await signInWithGoogle();
+    window.location.replace("index.html");
+  } catch (err) {
+    if (!isBenignPopupError(err)) {
+      showError(messageForError(err));
+    }
+    googleBtn.disabled = false;
   }
 });

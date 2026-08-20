@@ -1,4 +1,5 @@
 import { auth, onAuthStateChanged, createUserWithEmailAndPassword } from "./firebase.js";
+import { signInWithGoogle, isBenignPopupError } from "./google-auth.js";
 
 const form = document.getElementById("register-form");
 const emailInput = document.getElementById("register-email-input");
@@ -6,6 +7,7 @@ const passwordInput = document.getElementById("register-password-input");
 const confirmInput = document.getElementById("register-confirm-input");
 const errorEl = document.getElementById("register-form-error");
 const submitBtn = document.getElementById("register-submit-btn");
+const googleBtn = document.getElementById("google-signin-btn");
 
 // Already signed in? Skip straight to the planner.
 onAuthStateChanged(auth, (user) => {
@@ -29,6 +31,8 @@ function messageForError(err) {
       return "An account with this email already exists.";
     case "auth/weak-password":
       return "Password must be at least 6 characters.";
+    case "auth/account-exists-with-different-credential":
+      return "An account with this email already exists using a different sign-in method.";
     default:
       return "Something went wrong. Please try again.";
   }
@@ -67,5 +71,20 @@ form.addEventListener("submit", async (event) => {
     showError(messageForError(err));
     submitBtn.disabled = false;
     submitBtn.textContent = "Register";
+  }
+});
+
+googleBtn.addEventListener("click", async () => {
+  hideError();
+  googleBtn.disabled = true;
+
+  try {
+    await signInWithGoogle();
+    window.location.replace("index.html");
+  } catch (err) {
+    if (!isBenignPopupError(err)) {
+      showError(messageForError(err));
+    }
+    googleBtn.disabled = false;
   }
 });

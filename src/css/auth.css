@@ -20,6 +20,49 @@
   font-size: 1.1rem;
 }
 
+.auth-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.google-btn:hover {
+  background: var(--color-bg);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
 .auth-form label {
   font-size: 0.8rem;
   color: var(--color-text-muted);
