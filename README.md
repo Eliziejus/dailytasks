@@ -12,7 +12,7 @@ or serve `src/` with any static file server.
 - Register or log in with an email/password account.
 - View the calendar and pick a day.
 - Add, complete, and delete tasks for that day.
-- Tasks are saved in your browser's `localStorage`, scoped to the browser (not synced across devices) — logging in only controls who can open the app.
+- Tasks are saved to your account in the cloud (Firestore) and sync live across every tab or device where you're signed in. If you used the app before cloud sync existed, any tasks already sitting in that browser are uploaded to your account automatically the first time you log in.
 
 ## Setting up auth
 
@@ -35,7 +35,24 @@ Firebase's web config values (`apiKey`, `authDomain`, etc.) are safe to commit �
 - [ ] Logging in with the account you registered lands on the planner
 - [ ] Logging in with the wrong password shows an inline error and does not proceed
 - [ ] Reloading the planner while signed in keeps you signed in (no redirect to login)
-- [ ] Tasks you add still persist across a reload, exactly as before auth was added
+
+## Cloud sync (Firestore)
+
+Tasks are stored per-account in [Firestore](https://firebase.google.com/docs/firestore), Firebase's database — same project as auth, so there's nothing new to sign up for:
+
+1. In the [Firebase Console](https://console.firebase.google.com/), open your project and go to **Build → Firestore Database → Create database**. Any region is fine; production mode is fine since the app ships its own rules.
+2. Go to the **Rules** tab and replace the default rules with the contents of [`firestore.rules`](firestore.rules) in this repo, then **Publish**. This scopes every read/write to the signed-in user's own data.
+3. That's it — no config values to copy; Firestore uses the same Firebase project config already in `src/js/firebase-config.js`.
+
+### Manual QA checklist (after enabling Firestore + publishing the rules)
+
+- [ ] A browser with tasks already in `localStorage` from before this feature sees them appear automatically the first time it logs in
+- [ ] Logging out and back in on that same browser does not duplicate the migrated tasks
+- [ ] Adding a task appears in the list without a manual reload
+- [ ] Opening the same account in a second tab (or another browser) shows a task added in the first tab appear live, without reloading
+- [ ] Completing/deleting a task in one tab is reflected in the other tab
+- [ ] Logging out and back in (or opening on a different device) shows the same tasks
+- [ ] Temporarily breaking the connection (e.g. dev tools "offline" mode) and trying to add a task shows a visible error rather than failing silently
 
 ## Development
 

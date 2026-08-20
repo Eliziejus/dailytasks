@@ -5,9 +5,9 @@
 
 ## Project Structure
 
-- **Source code**: `src/` (`index.html`, `css/`, `js/`)
+- **Source code**: `src/` (`index.html`, `login.html`, `register.html`, `css/`, `js/`)
 - **Tests**: none yet
-- **Config files**: none (no build step)
+- **Config files**: `src/js/firebase-config.js` (Firebase project config — not secret, but user-specific: see README "Setting up auth"), `firestore.rules` (Firestore security rules, pasted manually into the Firebase console)
 - **Generated artifacts**: none — served as static files
 
 ## Language & Tooling
@@ -33,5 +33,5 @@ See `/brain` command for the BRAIN workflow.
 
 ## Constraints
 
-- No backend, no user accounts — data persists in browser `localStorage` only.
-- Must be deployable as a static site (e.g. GitHub Pages, Netlify).
+- No server process to write or host — Firebase Auth (accounts) and Firestore (per-account task storage) are used via CDN client SDKs, so there's still no build step and no server code in this repo.
+- Must be deployable as a static site (e.g. GitHub Pages, Netlify). Deploying to a new domain requires adding that domain to Firebase's Authorized Domains (see README) and publishing `firestore.rules` in the Firebase console — both one-time manual steps in the Firebase project, not in this repo's build.
