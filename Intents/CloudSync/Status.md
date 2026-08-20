@@ -3,7 +3,7 @@
 ## Intents
 | No. | Name | Status | Est. | Actual | Notes |
 |----:|------|--------|-----:|-------:|-------|
-| 1   | FirestoreSetup | Todo | 0.5h |  |  |
+| 1   | FirestoreSetup | Done | 0.5h |  |  |
 | 2   | TaskRepository | Todo | 1h |  |  |
 | 3   | WireAppToFirestore | Todo | 1.5h |  | Refactors app.js's CRUD from sync/localStorage to async/Firestore |
 | 4   | LocalStorageMigration | Todo | 1h |  |  |

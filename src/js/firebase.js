@@ -7,10 +7,25 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  setDoc,
+  getDoc,
+  onSnapshot,
+  writeBatch,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 export { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut };
+export { collection, doc, addDoc, updateDoc, deleteDoc, setDoc, getDoc, onSnapshot, writeBatch, serverTimestamp };
