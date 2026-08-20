@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — Daily Planner</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body class="auth-body">
+  <header class="app-header">
+    <h1>Daily Planner</h1>
+  </header>
+
+  <main class="auth-main">
+    <form id="register-form" class="auth-form" novalidate>
+      <h2>Register</h2>
+
+      <label for="register-email-input">Email</label>
+      <input id="register-email-input" name="email" type="email" required autocomplete="email" />
+
+      <label for="register-password-input">Password</label>
+      <input id="register-password-input" name="password" type="password" required autocomplete="new-password" minlength="6" />
+
+      <label for="register-confirm-input">Confirm password</label>
+      <input id="register-confirm-input" name="confirm" type="password" required autocomplete="new-password" minlength="6" />
+
+      <p id="register-form-error" class="form-error" hidden></p>
+
+      <div class="dialog-actions">
+        <button type="submit" id="register-submit-btn">Register</button>
+      </div>
+
+      <p class="auth-switch">Already have an account? <a href="login.html">Log In</a></p>
+    </form>
+  </main>
+
+  <script type="module" src="js/register.js"></script>
+</body>
+</html>
