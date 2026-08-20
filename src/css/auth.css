@@ -59,3 +59,13 @@
 .auth-switch a {
   color: var(--color-accent);
 }
+
+@media (max-width: 480px) {
+  .auth-main {
+    padding: 0 0.5rem;
+  }
+
+  .auth-form {
+    padding: 1rem;
+  }
+}

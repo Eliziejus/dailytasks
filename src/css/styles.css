@@ -428,4 +428,10 @@ dialog#task-dialog::backdrop {
   .task-actions {
     margin-left: auto;
   }
+
+  .user-info {
+    position: static;
+    justify-content: center;
+    margin-top: 0.6rem;
+  }
 }
