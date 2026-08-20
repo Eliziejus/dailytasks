@@ -1,6 +1,6 @@
 // Daily Planner — app entry point
 import { auth, onAuthStateChanged } from "./firebase.js";
-import { subscribeToTasks, addTask, updateTask, deleteTask } from "./tasks-repo.js";
+import { subscribeToTasks, addTask, updateTask, deleteTask, migrateLocalTasksIfNeeded } from "./tasks-repo.js";
 
 const state = {
   weekStart: getMonday(new Date()),
@@ -326,7 +326,7 @@ taskForm.addEventListener("submit", async (event) => {
 
 // --- Firestore subscription, driven by auth state ---
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (!user) {
     if (unsubscribeTasks) {
       unsubscribeTasks();
@@ -336,6 +336,13 @@ onAuthStateChanged(auth, (user) => {
   }
 
   currentUid = user.uid;
+
+  try {
+    await migrateLocalTasksIfNeeded(currentUid);
+  } catch (err) {
+    console.error("Failed to migrate local tasks:", err);
+  }
+
   if (unsubscribeTasks) unsubscribeTasks();
   unsubscribeTasks = subscribeToTasks(
     currentUid,
