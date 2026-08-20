@@ -1,0 +1,17 @@
+# CloudSync
+
+> Owner: Eliziejus  ·  Created: 2026-08-20
+
+## Begin (raw)
+<!-- 3-minute brain dump. Do not edit or reinterpret. -->
+
+can you add backend as well? That add not for localstorage but real database. can you recommended witch data base do i need use?
+
+## Refine (scope)
+- **Goal**: Replace per-browser `localStorage` task persistence with a real per-account database, so a signed-in user sees the same tasks on any device. Recommended and chosen: **Firestore** (Firebase's database) — it shares the same project and SDK family as the Firebase Auth already wired up for the app, needs no server process to host, and its security rules can gate data directly by `request.auth.uid`.
+- **In / Out of scope**: In — Firestore wired via the existing CDN Firebase SDK, a `users/{uid}/tasks/{taskId}` data model, a repository module wrapping Firestore reads/writes, `app.js` refactored to read/write through that repository instead of `localStorage`, a real-time listener (`onSnapshot`) so multiple open tabs/devices for the same account stay in sync live, a one-time migration that uploads any tasks already sitting in a browser's `localStorage` into Firestore the first time that account logs in post-migration, loading/error states for network operations, security rules documented for the user to paste into the Firebase console, and updated docs (root `CONTEXT.md` constraints, README). Out — offline-first conflict resolution beyond Firestore's built-in offline cache, multi-user sharing/collaboration on the same task list, task history/undo, server-side validation beyond Firestore security rules.
+- **Definition of Done**: A signed-in user's tasks are stored in Firestore under their account, not `localStorage`. Adding, editing, completing, and deleting a task writes to Firestore and is reflected immediately (via local cache echo) and confirmed once synced. Opening the same account in a second tab shows changes made in the first tab without a manual reload. A user who had tasks in `localStorage` from before this feature sees those tasks automatically appear in their account the first time they log in afterward, and the migration does not repeat on subsequent logins. Logging out and back in (or switching devices) shows the same tasks.
+- **Constraints**: No server process to write or host (per root `CONTEXT.md`'s "static site" requirement) — Firestore is a managed, client-SDK-accessible database, so this still deploys as static files. The user must enable Firestore in their existing Firebase project and paste the provided security rules into the console — Claude cannot do this for them (no account/API access). Root `CONTEXT.md`'s "no backend, no user accounts — localStorage only" constraint is now stale as of the Auth feature and will be corrected as part of this work's docs intent.
+- **Risks**: `app.js`'s task CRUD functions currently mutate an in-memory object and call a synchronous `saveTasks()`; moving to async Firestore calls plus a real-time listener is a real refactor of that file, not an additive change. Cannot be end-to-end tested until the user enables Firestore and applies the security rules in their real project (same limitation as the Auth feature).
+- **Resources**: https://firebase.google.com/docs/firestore/quickstart, https://firebase.google.com/docs/firestore/security/rules-structure
+- **Dependencies**: Auth (Firebase Auth + `firebase.js` init already exist; this extends the same Firebase project).
