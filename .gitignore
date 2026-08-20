@@ -25,7 +25,7 @@ secrets/
 Thumbs.db
 
 # Dependencies (uncomment as needed for your stack)
-# node_modules/
+node_modules/
 # vendor/
 # __pycache__/
 # *.pyc
@@ -48,3 +48,6 @@ logs/
 # Test coverage
 coverage/
 .nyc_output/
+
+# Local verification scripts (Playwright, not part of the app)
+.verify/
