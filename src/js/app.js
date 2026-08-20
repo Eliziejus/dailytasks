@@ -176,6 +176,11 @@ function renderDayDetail() {
     checkbox.type = "checkbox";
     checkbox.className = "task-checkbox";
     checkbox.checked = !!task.done;
+    checkbox.setAttribute("aria-label", `Mark "${task.title}" as ${task.done ? "not done" : "done"}`);
+    checkbox.addEventListener("change", () => {
+      task.done = checkbox.checked;
+      renderDayDetail();
+    });
 
     const content = document.createElement("div");
     content.className = "task-content";
@@ -204,6 +209,9 @@ function renderDayDetail() {
       content.appendChild(notesEl);
     }
 
+    const actions = document.createElement("div");
+    actions.className = "task-actions";
+
     const editBtn = document.createElement("button");
     editBtn.type = "button";
     editBtn.className = "task-edit-btn";
@@ -211,7 +219,20 @@ function renderDayDetail() {
     editBtn.setAttribute("aria-label", `Edit "${task.title}"`);
     editBtn.addEventListener("click", () => openTaskDialog(task));
 
-    item.append(checkbox, content, editBtn);
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "task-delete-btn";
+    deleteBtn.textContent = "Delete";
+    deleteBtn.setAttribute("aria-label", `Delete "${task.title}"`);
+    deleteBtn.addEventListener("click", () => {
+      if (!window.confirm(`Delete "${task.title}"?`)) return;
+      const dayTasks = tasksByDate[state.selectedDate] || [];
+      tasksByDate[state.selectedDate] = dayTasks.filter((t) => t.id !== task.id);
+      renderDayDetail();
+    });
+
+    actions.append(editBtn, deleteBtn);
+    item.append(checkbox, content, actions);
     list.appendChild(item);
   }
 
