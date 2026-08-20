@@ -1,4 +1,6 @@
 // Daily Planner — app entry point
+import { auth, onAuthStateChanged } from "./firebase.js";
+import { subscribeToTasks, addTask, updateTask, deleteTask } from "./tasks-repo.js";
 
 const state = {
   weekStart: getMonday(new Date()),
@@ -42,29 +44,19 @@ function formatDisplayDate(key) {
   return `${FULL_WEEKDAY_LABELS[date.getDay()]}, ${MONTH_LABELS[date.getMonth()]} ${date.getDate()}`;
 }
 
-// date key ("YYYY-MM-DD") -> array of { id, title, time, notes, done }
-const STORAGE_KEY = "dailyPlanner.tasksByDate";
+// date key ("YYYY-MM-DD") -> array of { id, title, time, notes, done }, kept in sync from Firestore
+let tasksByDate = {};
+let currentUid = null;
+let unsubscribeTasks = null;
 
-function loadTasks() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
-  } catch {
-    return {};
+function groupByDate(tasks) {
+  const grouped = {};
+  for (const task of tasks) {
+    if (!grouped[task.date]) grouped[task.date] = [];
+    grouped[task.date].push(task);
   }
+  return grouped;
 }
-
-function saveTasks() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasksByDate));
-  } catch (err) {
-    console.error("Failed to save tasks to localStorage:", err);
-  }
-}
-
-let tasksByDate = loadTasks();
 
 function getTasksForDate(key) {
   return tasksByDate[key] || [];
@@ -199,9 +191,10 @@ function renderDayDetail() {
     checkbox.checked = !!task.done;
     checkbox.setAttribute("aria-label", `Mark "${task.title}" as ${task.done ? "not done" : "done"}`);
     checkbox.addEventListener("change", () => {
-      task.done = checkbox.checked;
-      saveTasks();
-      renderDayDetail();
+      updateTask(currentUid, task.id, { done: checkbox.checked }).catch((err) => {
+        console.error("Failed to update task:", err);
+        checkbox.checked = !checkbox.checked;
+      });
     });
 
     const content = document.createElement("div");
@@ -248,10 +241,9 @@ function renderDayDetail() {
     deleteBtn.setAttribute("aria-label", `Delete "${task.title}"`);
     deleteBtn.addEventListener("click", () => {
       if (!window.confirm(`Delete "${task.title}"?`)) return;
-      const dayTasks = tasksByDate[state.selectedDate] || [];
-      tasksByDate[state.selectedDate] = dayTasks.filter((t) => t.id !== task.id);
-      saveTasks();
-      renderDayDetail();
+      deleteTask(currentUid, task.id).catch((err) => {
+        console.error("Failed to delete task:", err);
+      });
     });
 
     actions.append(editBtn, deleteBtn);
@@ -274,6 +266,7 @@ const taskTimeInput = document.getElementById("task-time-input");
 const taskNotesInput = document.getElementById("task-notes-input");
 const taskFormError = document.getElementById("task-form-error");
 const taskCancelBtn = document.getElementById("task-cancel-btn");
+const taskSaveBtn = document.getElementById("task-save-btn");
 
 function openTaskDialog(task) {
   editingTaskId = task ? task.id : null;
@@ -296,7 +289,7 @@ taskCancelBtn.addEventListener("click", () => {
   closeTaskDialog();
 });
 
-taskForm.addEventListener("submit", (event) => {
+taskForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const title = taskTitleInput.value.trim();
@@ -307,29 +300,52 @@ taskForm.addEventListener("submit", (event) => {
     return;
   }
 
-  const dayTasks = tasksByDate[state.selectedDate] || (tasksByDate[state.selectedDate] = []);
+  const payload = {
+    title,
+    time: taskTimeInput.value,
+    notes: taskNotesInput.value.trim(),
+    date: state.selectedDate,
+  };
 
-  if (editingTaskId) {
-    const existing = dayTasks.find((t) => t.id === editingTaskId);
-    if (existing) {
-      existing.title = title;
-      existing.time = taskTimeInput.value;
-      existing.notes = taskNotesInput.value.trim();
+  taskSaveBtn.disabled = true;
+
+  try {
+    if (editingTaskId) {
+      await updateTask(currentUid, editingTaskId, payload);
+    } else {
+      await addTask(currentUid, payload);
     }
-  } else {
-    dayTasks.push({
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      title,
-      time: taskTimeInput.value,
-      notes: taskNotesInput.value.trim(),
-      done: false,
-    });
+    closeTaskDialog();
+  } catch (err) {
+    taskFormError.textContent = "Failed to save. Please try again.";
+    taskFormError.hidden = false;
+  } finally {
+    taskSaveBtn.disabled = false;
   }
-
-  saveTasks();
-  closeTaskDialog();
-  renderDayDetail();
 });
 
-renderWeekStrip();
-renderDayDetail();
+// --- Firestore subscription, driven by auth state ---
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    if (unsubscribeTasks) {
+      unsubscribeTasks();
+      unsubscribeTasks = null;
+    }
+    return;
+  }
+
+  currentUid = user.uid;
+  if (unsubscribeTasks) unsubscribeTasks();
+  unsubscribeTasks = subscribeToTasks(
+    currentUid,
+    (tasks) => {
+      tasksByDate = groupByDate(tasks);
+      renderWeekStrip();
+      renderDayDetail();
+    },
+    (err) => {
+      console.error("Failed to load tasks:", err);
+    }
+  );
+});
