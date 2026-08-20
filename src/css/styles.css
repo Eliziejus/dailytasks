@@ -131,6 +131,71 @@ main {
 }
 
 .day-detail-heading {
-  margin: 0;
+  margin: 0 0 0.75rem;
   font-size: 1.1rem;
+}
+
+.empty-state {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.task-item.done {
+  opacity: 0.6;
+}
+
+.task-checkbox {
+  margin-top: 0.2rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+}
+
+.task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.task-title {
+  font-weight: 600;
+}
+
+.task-item.done .task-title {
+  text-decoration: line-through;
+}
+
+.task-time {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.task-notes {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
 }
