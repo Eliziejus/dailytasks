@@ -43,7 +43,28 @@ function formatDisplayDate(key) {
 }
 
 // date key ("YYYY-MM-DD") -> array of { id, title, time, notes, done }
-let tasksByDate = {};
+const STORAGE_KEY = "dailyPlanner.tasksByDate";
+
+function loadTasks() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveTasks() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasksByDate));
+  } catch (err) {
+    console.error("Failed to save tasks to localStorage:", err);
+  }
+}
+
+let tasksByDate = loadTasks();
 
 function getTasksForDate(key) {
   return tasksByDate[key] || [];
@@ -179,6 +200,7 @@ function renderDayDetail() {
     checkbox.setAttribute("aria-label", `Mark "${task.title}" as ${task.done ? "not done" : "done"}`);
     checkbox.addEventListener("change", () => {
       task.done = checkbox.checked;
+      saveTasks();
       renderDayDetail();
     });
 
@@ -228,6 +250,7 @@ function renderDayDetail() {
       if (!window.confirm(`Delete "${task.title}"?`)) return;
       const dayTasks = tasksByDate[state.selectedDate] || [];
       tasksByDate[state.selectedDate] = dayTasks.filter((t) => t.id !== task.id);
+      saveTasks();
       renderDayDetail();
     });
 
@@ -303,6 +326,7 @@ taskForm.addEventListener("submit", (event) => {
     });
   }
 
+  saveTasks();
   closeTaskDialog();
   renderDayDetail();
 });
