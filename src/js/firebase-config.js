@@ -6,10 +6,10 @@
 // See README.md "Setting up auth" for step-by-step instructions.
 
 export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: "AIzaSyDVF9cnvTSfSFrvNA20vEyqnm02x5VCbIY",
+  authDomain: "dailytasks-c1440.firebaseapp.com",
+  projectId: "dailytasks-c1440",
+  storageBucket: "dailytasks-c1440.firebasestorage.app",
+  messagingSenderId: "792413955711",
+  appId: "1:792413955711:web:c931dd9b24ff49768e014a",
 };
