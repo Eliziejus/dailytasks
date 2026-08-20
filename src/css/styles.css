@@ -199,3 +199,116 @@ main {
   font-size: 0.85rem;
   color: var(--color-text-muted);
 }
+
+.day-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.day-detail-header .day-detail-heading {
+  margin: 0;
+}
+
+.add-task-btn {
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-task-btn:hover {
+  opacity: 0.9;
+}
+
+.task-edit-btn {
+  align-self: flex-start;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.task-edit-btn:hover {
+  background: var(--color-bg);
+}
+
+dialog#task-dialog {
+  border: none;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  width: min(420px, 90vw);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+dialog#task-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+#task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+#task-form h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+#task-form label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.4rem;
+}
+
+#task-form input,
+#task-form textarea {
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  resize: vertical;
+}
+
+.form-error {
+  color: #c0392b;
+  font-size: 0.8rem;
+  margin: 0.25rem 0 0;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.dialog-actions button {
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+#task-cancel-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+#task-save-btn {
+  border: 1px solid var(--color-accent);
+  background: var(--color-accent);
+  color: #fff;
+}

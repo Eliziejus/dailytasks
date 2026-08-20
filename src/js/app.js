@@ -137,10 +137,22 @@ function renderDayDetail() {
   const container = document.getElementById("day-detail");
   container.innerHTML = "";
 
+  const headerRow = document.createElement("div");
+  headerRow.className = "day-detail-header";
+
   const heading = document.createElement("h2");
   heading.className = "day-detail-heading";
   heading.textContent = formatDisplayDate(state.selectedDate);
-  container.appendChild(heading);
+
+  const addBtn = document.createElement("button");
+  addBtn.type = "button";
+  addBtn.className = "add-task-btn";
+  addBtn.id = "add-task-btn";
+  addBtn.textContent = "+ Add task";
+  addBtn.addEventListener("click", () => openTaskDialog(null));
+
+  headerRow.append(heading, addBtn);
+  container.appendChild(headerRow);
 
   const tasks = sortedTasks(getTasksForDate(state.selectedDate));
 
@@ -192,12 +204,87 @@ function renderDayDetail() {
       content.appendChild(notesEl);
     }
 
-    item.append(checkbox, content);
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = "task-edit-btn";
+    editBtn.textContent = "Edit";
+    editBtn.setAttribute("aria-label", `Edit "${task.title}"`);
+    editBtn.addEventListener("click", () => openTaskDialog(task));
+
+    item.append(checkbox, content, editBtn);
     list.appendChild(item);
   }
 
   container.appendChild(list);
 }
+
+// --- Task add/edit dialog ---
+
+let editingTaskId = null;
+
+const taskDialog = document.getElementById("task-dialog");
+const taskForm = document.getElementById("task-form");
+const taskDialogTitle = document.getElementById("task-dialog-title");
+const taskTitleInput = document.getElementById("task-title-input");
+const taskTimeInput = document.getElementById("task-time-input");
+const taskNotesInput = document.getElementById("task-notes-input");
+const taskFormError = document.getElementById("task-form-error");
+const taskCancelBtn = document.getElementById("task-cancel-btn");
+
+function openTaskDialog(task) {
+  editingTaskId = task ? task.id : null;
+  taskDialogTitle.textContent = task ? "Edit Task" : "Add Task";
+  taskTitleInput.value = task ? task.title : "";
+  taskTimeInput.value = task ? task.time || "" : "";
+  taskNotesInput.value = task ? task.notes || "" : "";
+  taskFormError.hidden = true;
+  taskDialog.showModal();
+  taskTitleInput.focus();
+}
+
+function closeTaskDialog() {
+  taskDialog.close();
+  taskForm.reset();
+  editingTaskId = null;
+}
+
+taskCancelBtn.addEventListener("click", () => {
+  closeTaskDialog();
+});
+
+taskForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const title = taskTitleInput.value.trim();
+  if (!title) {
+    taskFormError.textContent = "Title is required.";
+    taskFormError.hidden = false;
+    taskTitleInput.focus();
+    return;
+  }
+
+  const dayTasks = tasksByDate[state.selectedDate] || (tasksByDate[state.selectedDate] = []);
+
+  if (editingTaskId) {
+    const existing = dayTasks.find((t) => t.id === editingTaskId);
+    if (existing) {
+      existing.title = title;
+      existing.time = taskTimeInput.value;
+      existing.notes = taskNotesInput.value.trim();
+    }
+  } else {
+    dayTasks.push({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      title,
+      time: taskTimeInput.value,
+      notes: taskNotesInput.value.trim(),
+      done: false,
+    });
+  }
+
+  closeTaskDialog();
+  renderDayDetail();
+});
 
 renderWeekStrip();
 renderDayDetail();

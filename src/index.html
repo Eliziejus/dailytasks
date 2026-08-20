@@ -16,6 +16,28 @@
     <section id="day-detail" aria-label="Tasks for selected day"></section>
   </main>
 
+  <dialog id="task-dialog">
+    <form id="task-form" method="dialog">
+      <h2 id="task-dialog-title">Add Task</h2>
+
+      <label for="task-title-input">Title</label>
+      <input id="task-title-input" name="title" type="text" required maxlength="120" />
+
+      <label for="task-time-input">Time (optional)</label>
+      <input id="task-time-input" name="time" type="time" />
+
+      <label for="task-notes-input">Notes (optional)</label>
+      <textarea id="task-notes-input" name="notes" rows="3" maxlength="500"></textarea>
+
+      <p id="task-form-error" class="form-error" hidden></p>
+
+      <div class="dialog-actions">
+        <button type="button" id="task-cancel-btn">Cancel</button>
+        <button type="submit" id="task-save-btn">Save</button>
+      </div>
+    </form>
+  </dialog>
+
   <script src="js/app.js"></script>
 </body>
 </html>
